@@ -1,4 +1,9 @@
 # idea showdoc插件
+### 安装
+1. 下载Releases中的jar文件。
+2. setting->Plugins->Install from Disk...
+3. 选择刚刚下载的jar文件。
+
 ### 配置方式
 1. 在setting->tools->showDocConfig中配置。
 2. 第一次使用时，会弹窗提示输入配置。

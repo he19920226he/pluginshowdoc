@@ -1,7 +1,7 @@
 package com.yuanshuai.idea.template;
 
+import com.intellij.codeInsight.template.TemplateActionContext;
 import com.intellij.codeInsight.template.TemplateContextType;
-import com.intellij.psi.PsiFile;
 import org.jetbrains.annotations.NotNull;
 
 public class LiveTemplateContext extends TemplateContextType {
@@ -11,7 +11,7 @@ public class LiveTemplateContext extends TemplateContextType {
     }
 
     @Override
-    public boolean isInContext(@NotNull PsiFile psiFile, int offset) {
-        return psiFile.getName().endsWith(".php");
+    public boolean isInContext(@NotNull TemplateActionContext templateActionContext) {
+        return templateActionContext.getFile().getName().endsWith(".php");
     }
 }

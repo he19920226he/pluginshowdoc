@@ -8,7 +8,7 @@ import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.*;
 import com.yuanshuai.idea.config.ShowDocState;
-import com.yuanshuai.idea.utils.NotificationUtil;
+import com.yuanshuai.idea.utils.ShowDocNotification;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -26,9 +26,9 @@ import java.util.regex.Pattern;
 
 public class GenerateApiAction extends AnAction {
 
-    private String api;
-    private String key;
-    private String token;
+    private String api = "";
+    private String key = "";
+    private String token = "";
 
     private Project project;
 
@@ -64,17 +64,17 @@ public class GenerateApiAction extends AnAction {
         String fileName = psiFile.getName();
 
         if (!fileName.contains(".php")) {
-            NotificationUtil.errorNotify(fileName + "不是PHP文件", this.project);
+            ShowDocNotification.errorNotify(fileName + "不是PHP文件", this.project);
             return;
         }
 
         String fileContext = psiFile.getText();
         if (!fileContext.contains("showdoc")) {
-            NotificationUtil.errorNotify(fileName + "文件不包含showdoc关键字", this.project);
+            ShowDocNotification.errorNotify(fileName + "文件不包含showdoc关键字", this.project);
             return;
         }
 
-        NotificationUtil.infoNotify("开始上传接口：" + fileName, this.project);
+        ShowDocNotification.infoNotify("开始上传接口：" + fileName, this.project);
 
         String patternStr = "(/\\*{1,2}[\\s\\S]*?\\*/)";
         Pattern pattern = Pattern.compile(patternStr, Pattern.MULTILINE | Pattern.DOTALL);
@@ -112,10 +112,10 @@ public class GenerateApiAction extends AnAction {
                 String result = EntityUtils.toString(entity, "UTF-8");
                 result = result.replaceAll("\n", "");
                 result = result.trim();
-                NotificationUtil.infoNotify(fileName + "接口上传结果：" + result, this.project);
+                ShowDocNotification.infoNotify(fileName + "接口上传结果：" + result, this.project);
             }
         } catch (IOException ioException) {
-            NotificationUtil.errorNotify("接口上传失败：" + ioException.getMessage(), this.project);
+            ShowDocNotification.errorNotify("接口上传失败：" + ioException.getMessage(), this.project);
             System.out.println(ioException.getMessage());
         }
     }
@@ -129,8 +129,8 @@ public class GenerateApiAction extends AnAction {
         System.out.println("api:" + this.api);
         if (StringUtil.isEmpty(this.api)) {
             this.api = Messages.showInputDialog("Input Api", "Input Api", Messages.getWarningIcon());
-            if (StringUtil.isEmpty(this.api)) {
-                NotificationUtil.warnNotify("Api Is Empty", this.project);
+            if (StringUtil.isEmpty(this.api) || Objects.isNull(this.api)) {
+                ShowDocNotification.warnNotify("Api Is Empty", this.project);
                 return;
             }
             this.showDocState.setApi(this.api);
@@ -140,8 +140,8 @@ public class GenerateApiAction extends AnAction {
         System.out.println("key:" + this.key);
         if (StringUtil.isEmpty(this.key)) {
             this.key = Messages.showInputDialog("Input Key", "Input Key", Messages.getWarningIcon());
-            if (StringUtil.isEmpty(this.key)) {
-                NotificationUtil.warnNotify("Key Is Empty", this.project);
+            if (StringUtil.isEmpty(this.key) || Objects.isNull(this.key)) {
+                ShowDocNotification.warnNotify("Key Is Empty", this.project);
                 return;
             }
             this.showDocState.setKey(this.key);
@@ -151,8 +151,8 @@ public class GenerateApiAction extends AnAction {
         System.out.println("token:" + this.token);
         if (StringUtil.isEmpty(this.token)) {
             this.token = Messages.showInputDialog("Input Token", "Input Token", Messages.getWarningIcon());
-            if (StringUtil.isEmpty(this.token)) {
-                NotificationUtil.warnNotify("Token Is Empty", this.project);
+            if (StringUtil.isEmpty(this.token) || Objects.isNull(this.token)) {
+                ShowDocNotification.warnNotify("Token Is Empty", this.project);
                 return;
             }
             this.showDocState.setToken(this.token);

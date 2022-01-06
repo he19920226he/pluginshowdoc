@@ -20,7 +20,7 @@ public class ShowDocState implements PersistentStateComponent<Element> {
 
     public static ShowDocState getInstance(@NotNull Project project)
     {
-        return ServiceManager.getService(project, ShowDocState.class);
+        return project.getService(ShowDocState.class);
     }
 
     @Override
